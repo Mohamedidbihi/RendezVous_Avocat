@@ -4,6 +4,7 @@ class RDV {
 
     private $conn;
     private $table = 'rdv';
+    public $Id_rdv;
     public $Reference;
     public $Motif;
     public $Date;
@@ -13,11 +14,12 @@ class RDV {
     public function __construct($db) {
       $this->conn = $db;
     }
+  
     public function AddRdv(){
         try
         {
            
-      $query  = 'INSERT INTO ' .$this->table.'( `Motif`, `Date`, `Num_creneau`, `Reference`) VALUES ( :Reference, :nom, :prenom, :profession ,:Telephone, :cin);'; 
+      $query  = 'INSERT INTO ' .$this->table.'( `Reference`, `Motif`, `Date` `Num_creneau`) VALUES ( :Reference, :Motif, :Date, :Num_Creneau);'; 
       $stmt = $this->conn->prepare($query);
       $stmt->bindParam(':Reference',$this->Reference);
       $stmt->bindParam(':Motif',$this->Motif);
@@ -34,15 +36,29 @@ class RDV {
     }
     public function read() {
 
-        $query = 'SELECT `rdv.Motif`, `rdv.Date`, `Rdv.Time` FROM rdv , creneau c WHERE c.Num_creneau=rdv.Num_creneau';
-        
-        // Prepare statement
+        $query = 'SELECT r.Id_rdv,r.Date,r.Motif,c.Num_creneau from rdv r, creneau c where r.Reference = :Reference and r.Num_creneau=c.Num_creneau';
         $stmt = $this->conn->prepare($query);
-  
-        // Execute query
+        $stmt->bindParam(':Reference',$this->Reference);
         $stmt->execute();
-  
         return $stmt;
       }
+      public function delete(){
+
+        $query  = "DELETE FROM ". $this->table." WHERE Id_rdv = :id";
+        $stmt   = $this->conn->prepare($query);
+        $this->id = htmlspecialchars(strip_tags($this->Id_rdv));
+         $stmt->bindParam(':id',$this->Id_rdv);
+        if($stmt->execute()){
+          return true;
+        }else{
+        printf('Erreur de suppresion: %s.\n',$stmt->error);
+        return false;
+        } 
+    }
+public function Dropdown()
+{
+  $query ="SELECT * FROM creneau WHERE  Num_creneau NOT IN(SELECT c.Num_creneau FROM creneau c, rdv r where c.Num_creneau=r.Num_creneau AND r.Date='2021-06-18')";
+}
+
 
 }

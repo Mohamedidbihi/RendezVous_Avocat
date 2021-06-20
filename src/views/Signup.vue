@@ -4,26 +4,30 @@
                 <div class="text-center mb-4">
             <h1> Creation du compte Client </h1>
         </div>
-<form action="" id="login-form">
+<form action="" id="login-form" @submit.prevent="handleSubmit">
 <div class="row">
     <div class="col-sm-12 form-group">
-        <label for="Reference">Nom :</label>
-        <input type="text" id="reference" class="form-control form-control-lg" placeholder="Votre nom" v-model="Nom">
+        <label for="Nom">Nom :</label>
+        <input type="text" class="form-control form-control-lg" placeholder="Votre nom" v-model="nom">
     </div>
       <div class="col-sm-12 form-group">
-        <label for="Reference">Prenom :</label>
-        <input type="text" id="reference" class="form-control form-control-lg" placeholder="Votre prenom" v-model="Prenom">
+        <label for="Prenom">Prenom :</label>
+        <input type="text"  class="form-control form-control-lg" placeholder="Votre prenom" v-model="prenom">
     </div>
       <div class="col-sm-12 form-group">
-        <label for="Reference">Profession :</label>
-        <input type="text" id="reference" class="form-control form-control-lg " placeholder="Vitre profession" v-model="Profession">
+        <label for="Profession">Profession :</label>
+        <input type="text" class="form-control form-control-lg " placeholder="Votre profession" v-model="profession">
+    </div>
+    <div class="col-sm-12 form-group">
+        <label for="Cin">Cin :</label>
+        <input type="text"  class="form-control form-control-lg " placeholder="C.I.N" v-model="cin">
     </div>
      <div class="col-sm-12 form-group">
-        <label for="Reference">Numero de telephone :</label>
-        <input type="number" id="reference" class="form-control form-control-lg" placeholder="votre numero de telephone" v-model="Num">
+        <label for="Num">Numero de telephone :</label>
+        <input type="number"  class="form-control form-control-lg" placeholder="Votre numero de telephone" v-model="tele">
     </div>
     <div class="pt-4 col-sm-12 form-group ">
-        <button class="btn btn-primary btn-lg col-sm-4 mx-1" @click.prevent="Signup">S'enregistrer</button>
+        <button class="btn btn-primary btn-lg col-sm-4 mx-1" >S'enregistrer</button>
     </div>
      <div class="pt-4 col-sm-12 form-group mt-5">
 <p>Vous-avez deja un compte ? <router-link to="/Login">Login</router-link></p>
@@ -35,24 +39,41 @@
   </template>
 
 <script>
+ import axios from "axios";
   export default {
   name: 'Signup',
   data() {
       return {
-          Nom :'',
-          Prenom :'',
-          Profression:'',
-          Num :'',
+          nom :'',
+          prenom :'',
+          profession:'',
+          tele :'',
+          cin:'',
+          
       }
   },
   methods:{
-      Signup()
-      {
-          console.log('Perform Signup');
-          
-      } 
-  }
-  }
+  async handleSubmit(){
+    const response = await axios.post('http://localhost/brief06/src/Api/Signup.php',{
+            nom: this.nom,
+            prenom: this.prenom,
+            profession: this.profession,
+            tele: this.tele,
+            cin: this.cin});
+            console.log(response);
+            if(response.data.reference)
+            {
+            localStorage.setItem('Reference',response.data.reference)
+            this.$router.push("/Dashboard");
+            }
+            else
+            {
+              alert(response.data.message)
+            }
+
+  },
+},
+}
 </script>
 
 <style>

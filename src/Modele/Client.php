@@ -11,23 +11,35 @@ class Client {
     public $profession;
     public $tele;
 
+
     public function __construct($db) {
       $this->conn = $db;
     }
     public function CinExists(){
   
-      $query = 'SELECT * FROM' .$this->table.'WHERE Cin = :cin ;';
-      $stmt = $this->conn->prepare($query);
+      $sql = 'SELECT cin FROM ' .$this->table.' WHERE cin=  :cin';
+      $stmt = $this->conn->prepare($sql);
       $stmt->bindParam(':cin',$this->cin);
       $stmt->execute();
-      $count = $stmt->fetchColumn();
-      return $count;
-  }
+       $count = $stmt->rowCount();
+       return $count;
 
+  }
+  function generateRandomString($length = 6) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $Reference = 'AB_';
+    $cin = $this->cin;
+    $Reference .=$cin ;
+    for ($i = 0; $i < $length; $i++) {
+        $Reference .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $Reference;
+}
     public function Signup(){
         try
         {
-      $query  = 'INSERT INTO ' .$this->table.'(`Reference`, `Nom`, `Prenom`, `Profession`, `Telephone`,`Telephone`) VALUES ( :Reference, :nom, :prenom, :profession ,:Telephone, :cin);'; 
+      $query  = 'INSERT INTO ' .$this->table.'(`Reference`, `Nom`, `Prenom`, `Profession`, `Telephone`,`cin`) VALUES ( :Reference, :nom, :prenom, :profession ,:Telephone, :cin);'; 
       $stmt = $this->conn->prepare($query);
       $stmt->bindParam(':Reference',$this->Reference);
       $stmt->bindParam(':nom',$this->nom);
@@ -47,24 +59,30 @@ class Client {
 
     //Authentifieri
     public function Signin(){
-      $query  = 'SELECT * FROM' .$this->table.'WHERE REFERENCE = :reference' ;        
+
+      $query  = 'SELECT * FROM '.$this->table.' WHERE Reference=:Reference';       
       $stmt = $this->conn->prepare($query);
-      $stmt->bindParam(':reference',$this->Reference);
-      //Execute Data
+      $stmt->bindParam(':Reference',$this->Reference);
       $stmt->execute();
       $count = $stmt->rowCount();
       $row   = $stmt->fetch(PDO::FETCH_ASSOC);
       if($count == 1 && !empty($row))
        {
-         session_start();
-        $_SESSION['ref']   = $row['REFERENCE'];
- 
         return true;
-
       } 
       else {
        return false;
-    }   
-      
+    }    
     }
+    public function Read(){
+
+      $query = 'SELECT * FROM  Client WHERE Reference = :Reference';
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(':Reference',$this->Reference);
+      $stmt->execute();
+      $row        =   $stmt->fetch(PDO::FETCH_ASSOC);
+      return $row;
+   
+    }
+
 }

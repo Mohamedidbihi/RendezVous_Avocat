@@ -4,7 +4,7 @@
     <a href="#" class="navbar-brand">Gestion des Rendez-vous</a>
     <ul class="nav">
       <li class="nav-item">
-          <router-link  class="text-white" to="/">Home</router-link> 
+          <router-link  class="text-white"  to="/">Home</router-link> 
       </li>
       <li class="nav-item px-3">
         <router-link class="text-white"  to="/Signup">Signup</router-link> 
@@ -19,6 +19,14 @@
 </div>
   </div>
 </template>
+<script>
+
+export default {
+name :'login',
+props : ['Reference']
+    
+  }
+</script>
 
 <style>
 #app {
