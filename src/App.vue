@@ -11,6 +11,7 @@
       </li>
          <li class="nav-item">
         <router-link class="text-white"  to="/Login">Login</router-link> 
+        <router-link class="text-white"  to="/Login">Logout</router-link> 
       </li>
     </ul>
   </div>

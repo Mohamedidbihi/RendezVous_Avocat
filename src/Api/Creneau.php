@@ -12,29 +12,23 @@ $database   =   new Database();
 $db         =   $database->connect();
 $RDV       =   new RDV($db);
 $data   =   json_decode(file_get_contents("php://input"));
-$RDV->Reference = $data->Reference;
-$result     =   $RDV->read();
-$count        =   $result->rowCount();
+// $RDV->Date = $data->Date;
+$result     =   $RDV->Dropdown($data->Date);
+$count=$result->rowCount();
 
-    if($count > 0){
     $rdv_arr          =   array();
     $rdv_arr['data']  =   array();
     while($row = $result->fetch(PDO::FETCH_ASSOC)){
         extract($row);
         $rdva  = array(
-            'Id_rdv'     => $Id_rdv,
-            'Motif'     => $Motif,
-            'Date'  => $Date,
-            'Horaire' => $Horaire
+            'Num_creneau'     => $Num_creneau,
+            'Horaire'     => $Horaire
         );
-
         array_push($rdv_arr['data'],$rdva);
     }
+
     echo json_encode($rdv_arr['data']);
-}else{
-    echo json_encode(
-        array('message' => 'No rdv Found')
-    );
-}
+
+
 
 
