@@ -24,6 +24,11 @@ const routes = [
     name: "Login",
     component: Login,
   },
+  // {
+  //   path: "/Logout",
+  //   name: "Logout",
+  //   component: Logout,
+  // },
   {
     path: "/Signup",
     name: "Signup",

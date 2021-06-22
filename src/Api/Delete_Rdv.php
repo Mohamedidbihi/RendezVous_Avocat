@@ -20,14 +20,12 @@ $data   =   json_decode(file_get_contents("php://input"));
 $rdv->Id_rdv = $data->Id_rdv;
 
 //Create post
-if($rdv->delete()){
+if ($rdv->delete()) {
     echo json_encode(
         array('message' => 'Rdv Supprimer')
     );
-    
-}else{
+} else {
     echo json_encode(
         array('message' => 'erreur')
     );
 }
-

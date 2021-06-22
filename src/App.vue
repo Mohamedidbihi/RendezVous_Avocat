@@ -3,15 +3,14 @@
   <div class="navbar navbar-dark bg-primary">
     <a href="#" class="navbar-brand">Gestion des Rendez-vous</a>
     <ul class="nav">
-      <li class="nav-item">
-          <router-link  class="text-white"  to="/">Home</router-link> 
+      <li class="nav-item" v-if="!ref" >
+          <router-link  class="text-white"   to="/">Home</router-link> 
       </li>
-      <li class="nav-item px-3">
-        <router-link class="text-white"  to="/Signup">Signup</router-link> 
+      <li class="nav-item px-3" v-if="!ref">
+        <router-link  class="text-white" to="/Signup">Signup</router-link> 
       </li>
-         <li class="nav-item">
-        <router-link class="text-white"  to="/Login">Login</router-link> 
-        <router-link class="text-white"  to="/Login">Logout</router-link> 
+         <li class="nav-item px-3" v-if="!ref">
+        <router-link  class="text-white" to="/Login">Login</router-link> 
       </li>
     </ul>
   </div>
@@ -24,9 +23,13 @@
 
 export default {
 name :'login',
-props : ['Reference']
-    
+props : ['Reference'],
+        data() {
+    return {
+      ref :localStorage.getItem('Reference'),
+    }
   }
+}
 </script>
 
 <style>

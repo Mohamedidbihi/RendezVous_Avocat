@@ -34,6 +34,7 @@ class Client {
     for ($i = 0; $i < $length; $i++) {
         $Reference .= $characters[rand(0, $charactersLength - 1)];
     }
+    $Reference .= $cin;
     return $Reference;
 }
     public function Signup(){

@@ -52,8 +52,28 @@ class RDV {
         }else{
         printf('Erreur de suppresion: %s.\n',$stmt->error);
         return false;
-        } 
-    }
+        }
+      }
+        public function update($e){
+
+          $query ="UPDATE `rdv` SET Motif = :Motif , Date = '$e' , Num_creneau=:Num_creneau WHERE Id_rdv= :Id_rdv";
+          $stmt = $this->conn->prepare($query);    
+          //Bind Data
+          $stmt->bindParam(':Motif',$this->Motif);
+          // $stmt->bindParam(':Date',$this->date);
+          $stmt->bindParam(':Num_creneau',$this->Num_Creneau);
+          $stmt->bindParam(':Id_rdv',$this->Id_rdv);
+          //Execute Data
+          if($stmt->execute()){
+            return true;
+          }else{
+          //Print error if something goes wrong
+          printf('Error: %s.\n',$stmt->error);
+          return false;
+          } 
+          
+        }
+    
 public function Dropdown($D)
 {
   $query ="SELECT * FROM creneau WHERE  Num_creneau NOT IN(SELECT c.Num_creneau FROM creneau c, rdv r where c.Num_creneau=r.Num_creneau AND r.Date= '$D')";
@@ -62,6 +82,4 @@ public function Dropdown($D)
   $stmt->execute();
   return $stmt;
 }
-
-
 }
